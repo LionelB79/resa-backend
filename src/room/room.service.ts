@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoomEntity } from '@room/room.entity';
 import { Repository } from 'typeorm';
@@ -10,27 +10,31 @@ export class RoomService {
     @InjectRepository(RoomEntity)
     private roomRepository: Repository<RoomEntity>,
   ) {}
-  //TODO gerer les erreurs proprement + creer une table equipement
-  async createRoom(createRoomDto: CreateRoomDto): Promise<RoomEntity> {
-    try {
-      const { name, description, capacity, equipements, createdAt, updatedAt } =
-        createRoomDto;
 
+  //TODO creer une table equipement et l'alimenter à la creation d'une salle
+
+  async createRoom(createRoomDto: CreateRoomDto): Promise<RoomEntity> {
+    const { name, description, capacity, equipements } = createRoomDto;
+
+    const existingRoom = await this.find(name);
+    if (existingRoom.length) {
+      throw new BadRequestException(`La salle "${name}" existe déjà.`);
+    }
+    try {
       const room = this.roomRepository.create({
-        name,
-        description,
-        capacity,
-        equipements,
-        createdAt,
-        updatedAt,
+        ...createRoomDto,
       });
 
       await this.roomRepository.save(room);
       return room;
     } catch (error) {
-      throw new Error(
-        `Erreur lors de la création de la salle : ${error.message}`,
+      throw new BadRequestException(
+        `Erreur lors de la création de la salle: ${error.message}`,
       );
     }
+  }
+
+  find(name: string) {
+    return this.roomRepository.find({ where: { name } });
   }
 }
