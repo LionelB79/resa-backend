@@ -13,16 +13,15 @@ export class RoomService {
 
   async createRoom(createRoomDto: CreateRoomDto): Promise<RoomEntity> {
     try {
-      const { name, description, capacity, equipements, createdAt, updatedAt } =
-        createRoomDto;
+      const { name, description, capacity, equipements } = createRoomDto;
 
       const room = this.roomRepository.create({
         name,
         description,
         capacity,
         equipements,
-        createdAt,
-        updatedAt,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       await this.roomRepository.save(room);
