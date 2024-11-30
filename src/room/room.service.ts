@@ -10,7 +10,7 @@ export class RoomService {
     @InjectRepository(RoomEntity)
     private roomRepository: Repository<RoomEntity>,
   ) {}
-
+  //TODO gerer les erreurs proprement + creer une table equipement
   async createRoom(createRoomDto: CreateRoomDto): Promise<RoomEntity> {
     try {
       const { name, description, capacity, equipements, createdAt, updatedAt } =

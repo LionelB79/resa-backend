@@ -9,7 +9,7 @@ export class BookingService {
     @InjectRepository(BookingEntity)
     private bookingRepository: Repository<BookingEntity>,
   ) {}
-
+  //TODO gestion d'erreur si le creneau existe dejà
   async createBooking(
     bookingTitle: string,
     userEmail: string,
