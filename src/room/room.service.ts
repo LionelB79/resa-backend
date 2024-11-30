@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoomEntity } from '@room/room.entity';
 import { Repository } from 'typeorm';
-import { CreateRoomDto } from './dtos/create-room.dto';
+import { CreateRoomDto } from '@room/dtos/create-room.dto';
 
 @Injectable()
 export class RoomService {
