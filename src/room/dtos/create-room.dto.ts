@@ -20,8 +20,7 @@ export class CreateRoomDto {
 
   @IsOptional()
   @IsNumber()
-  @Min(5)
-  capacity?: number;
+  capacity: number;
 
   @IsOptional()
   @IsString({ each: true })
