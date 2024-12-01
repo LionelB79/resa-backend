@@ -1,7 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoomEntity } from '@room/room.entity';
-import { Repository } from 'typeorm';
+import { ObjectId, Repository } from 'typeorm';
 import { CreateRoomDto } from '@room/dtos/create-room.dto';
 
 @Injectable()
@@ -34,7 +38,23 @@ export class RoomService {
     }
   }
 
-  find(name: string) {
+  async find(name: string): Promise<RoomEntity[]> {
     return this.roomRepository.find({ where: { name } });
+  }
+
+  async findAll(): Promise<RoomEntity[]> {
+    return this.roomRepository.find();
+  }
+  //TODO à revoir
+  async findById(id: string): Promise<RoomEntity> {
+    const room = await this.roomRepository.findOne({
+      where: { id: new ObjectId(id) },
+    });
+
+    if (!room) {
+      throw new NotFoundException(`Salle avec l'ID ${id} non trouvée`);
+    }
+
+    return room;
   }
 }
