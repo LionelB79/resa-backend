@@ -25,10 +25,4 @@ export class CreateRoomDto {
   @IsOptional()
   @IsString({ each: true })
   equipements?: string[];
-
-  @IsDate()
-  createdAt: Date;
-
-  @IsDate()
-  updatedAt: Date;
 }

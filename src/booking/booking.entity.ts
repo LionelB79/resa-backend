@@ -7,7 +7,7 @@ export class BookingEntity {
   id: ObjectId;
 
   @Column()
-  roomId: string;
+  roomId: ObjectId;
 
   @Column()
   bookingTitle: string;
