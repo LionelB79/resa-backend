@@ -12,7 +12,7 @@ export class RoomService {
   ) {}
 
   //TODO creer une table equipement et l'alimenter à la creation d'une salle
-
+  //TODO la creation de la salle enregistrée en base à unse heure de decalage -> à gérer
   async createRoom(createRoomDto: CreateRoomDto): Promise<RoomEntity> {
     const { name, description, capacity, equipements } = createRoomDto;
 
