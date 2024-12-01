@@ -17,7 +17,7 @@ export class BookingService {
     @InjectRepository(RoomEntity)
     private roomRepository: Repository<RoomEntity>,
   ) {}
-  //TODO gestion d'erreur si le creneau existe dejà
+
   async createBooking(
     bookingTitle: string,
     userEmail: string,
@@ -25,18 +25,19 @@ export class BookingService {
     startTime: Date,
     endTime: Date,
   ): Promise<BookingEntity> {
-    //TODO l'erreur Salle non trouvée est levée alors que la salle existe, à corriger
     console.log(roomId);
-    // const room = await this.roomRepository.findOne({
-    //   where: { id: new ObjectId(roomId) },
-    // });
-    // if (!room) throw new NotFoundException('Salle non trouvée');
+
+    //On vérifier si la salle existe
+    const room = await this.roomRepository.findOne({
+      where: { id: new ObjectId(roomId) },
+    });
+    if (!room) throw new NotFoundException('Salle non trouvée');
 
     //TODO fonctionnel pour des crenaux correspondants mais le chevauchement des crenaux devra être géré
     //On vérifier si le créneau est déjà réservé
     const existingBooking = await this.bookingRepository.findOne({
       where: {
-        roomId,
+        roomId: new ObjectId(),
         userEmail,
         startTime,
         endTime,
