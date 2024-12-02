@@ -28,14 +28,19 @@ export class RoomService {
     }
     try {
       const room = this.roomRepository.create({
-        ...createRoomDto,
+        name,
+        description,
+        capacity,
+        equipements,
       });
 
       //Persistance des nouveau equipements
       await Promise.all(
-        equipements.map(async (equipementName) => {
-          await this.equipementsService.createEquipment(equipementName);
-        }),
+        await Promise.all(
+          equipements.map(async (equipement) => {
+            await this.equipementsService.createEquipment(equipement.name);
+          }),
+        ),
       );
 
       await this.roomRepository.save(room);

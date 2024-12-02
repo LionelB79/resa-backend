@@ -12,14 +12,13 @@ export class EquipementsService {
 
   async createEquipment(name: string): Promise<EquipementsEntity> {
     // Vérifie si l'équipement existe déjà
-    let equipment = await this.equipementsRepository.findOne({
+    const existingEquipement = await this.equipementsRepository.findOne({
       where: { name },
     });
-    if (!equipment) {
+    if (!existingEquipement) {
       // Crée un nouvel équipement s'il n'existe pas
-      equipment = this.equipementsRepository.create({ name });
-      await this.equipementsRepository.save(equipment);
+      const equipement = this.equipementsRepository.create({ name });
+      return await this.equipementsRepository.save(equipement);
     }
-    return equipment;
   }
 }
