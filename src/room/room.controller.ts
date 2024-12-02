@@ -16,7 +16,7 @@ export class RoomController {
   async getAllRooms(): Promise<RoomEntity[]> {
     return this.roomService.findAll();
   }
-  //TODO à revoir
+
   @Get(':id')
   async getRoomById(@Param('id') id: string): Promise<RoomEntity> {
     return this.roomService.findById(id);

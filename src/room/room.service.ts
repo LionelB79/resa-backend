@@ -45,7 +45,6 @@ export class RoomService {
   async findAll(): Promise<RoomEntity[]> {
     return this.roomRepository.find();
   }
-  //TODO à revoir
   async findById(id: string): Promise<RoomEntity> {
     const room = await this.roomRepository.findOne({
       where: { id: new ObjectId(id) },

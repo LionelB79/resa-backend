@@ -4,7 +4,7 @@ import { BookingService } from '@booking/booking.service';
 @Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
-  //TODO gestion d'erreur
+
   @Post()
   async createBooking(
     @Body()
