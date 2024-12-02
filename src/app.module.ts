@@ -6,6 +6,7 @@ import { RoomModule } from '@room/room.module';
 import { RoomEntity } from '@room/room.entity';
 import { BookingModule } from '@booking/booking.module';
 import { BookingEntity } from '@booking/booking.entity';
+import { EquipementsModule } from './equipements/equipements.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BookingEntity } from '@booking/booking.entity';
     }),
     RoomModule,
     BookingModule,
+    EquipementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
