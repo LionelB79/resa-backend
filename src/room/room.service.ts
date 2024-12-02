@@ -7,12 +7,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RoomEntity } from '@room/room.entity';
 import { ObjectId, Repository } from 'typeorm';
 import { CreateRoomDto } from '@room/dtos/create-room.dto';
+import { EquipementsService } from '@equipements/equipements.service';
 
 @Injectable()
 export class RoomService {
   constructor(
     @InjectRepository(RoomEntity)
     private roomRepository: Repository<RoomEntity>,
+    private equipementsService: EquipementsService,
   ) {}
 
   //TODO creer une table equipement et l'alimenter à la creation d'une salle
@@ -28,6 +30,13 @@ export class RoomService {
       const room = this.roomRepository.create({
         ...createRoomDto,
       });
+
+      //Persistance des nouveau equipements
+      await Promise.all(
+        equipements.map(async (equipementName) => {
+          await this.equipementsService.createEquipment(equipementName);
+        }),
+      );
 
       await this.roomRepository.save(room);
       return room;
