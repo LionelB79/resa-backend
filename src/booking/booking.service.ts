@@ -63,9 +63,9 @@ export class BookingService {
     roomId: string,
     weekStart: Date,
   ): Promise<BookingEntity[]> {
-    // Mise en place du crenaux duquel on recupere les booking ( une semaine )
+    //TODO Mise en place du crenaux duquel on recupere les booking ( une semaine )
 
-    // récupération des booking pour le crenaux définit
+    //TODO récupération des booking pour le crenaux définit
     const bookings = null;
     return bookings;
   }
