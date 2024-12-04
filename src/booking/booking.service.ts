@@ -63,7 +63,15 @@ export class BookingService {
     roomId: string,
     weekStart: Date,
   ): Promise<BookingEntity[]> {
-    //TODO Mise en place du crenaux duquel on recupere les booking ( une semaine )
+    //Mise en place du crenaux duquel on recupere les bookings ( sur une semaine )
+    // Clonage de la date de début de semaine pour éviter de modifier l'objet `weekStart`
+    const startDate = new Date(weekStart);
+    startDate.setHours(0, 0, 0, 0); // Définit l'heure de début à minuit, marquant le début de la journée
+
+    // Création de la date de fin de semaine en ajoutant 5 jours (lundi au vendredi)
+    const endDate = new Date(weekStart);
+    endDate.setDate(endDate.getDate() + 5); // Fixe le jour au vendredi de la même semaine
+    endDate.setHours(18, 0, 0, 0); // Définit l'heure de fin à 18:00 (fin de journée)
 
     //TODO récupération des booking pour le crenaux définit
     const bookings = null;
