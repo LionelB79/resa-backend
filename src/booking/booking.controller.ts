@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Param } from '@nestjs/common';
 import { BookingService } from '@booking/booking.service';
+import { BookingEntity } from '@booking/booking.entity';
 
 @Controller('booking')
 export class BookingController {
@@ -17,13 +18,28 @@ export class BookingController {
     },
   ) {
     const { bookingTitle, userEmail, roomId, startTime, endTime } = body;
+    try {
+      return await this.bookingService.createBooking(
+        bookingTitle,
+        userEmail,
+        roomId,
+        new Date(startTime),
+        new Date(endTime),
+      );
+    } catch (error) {
+      console.error('Erreur lors de la création de la réservation :', error);
+      throw new Error('Erreur lors de la réservation');
+    }
+  }
 
-    return await this.bookingService.createBooking(
-      bookingTitle,
-      userEmail,
+  @Get('room/:roomId/week')
+  async getRoomBookingsForWeek(
+    @Param('roomId') roomId: string,
+    @Query('weekStart') weekStart: string,
+  ) {
+    return await this.bookingService.getRoomBookingsForWeek(
       roomId,
-      new Date(startTime),
-      new Date(endTime),
+      new Date(weekStart),
     );
   }
 }
