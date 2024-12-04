@@ -58,4 +58,15 @@ export class BookingService {
 
     return await this.bookingRepository.save(booking);
   }
+
+  async getRoomBookingsForWeek(
+    roomId: string,
+    weekStart: Date,
+  ): Promise<BookingEntity[]> {
+    // Mise en place du crenaux duquel on recupere les booking ( une semaine )
+
+    // récupération des booking pour le crenaux définit
+    const bookings = null;
+    return bookings;
+  }
 }
