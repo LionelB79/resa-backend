@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDate,
   IsNotEmpty,
   IsNumber,
@@ -7,6 +8,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
+import { EquipementsDto } from '@equipements/dtos/equipements.dto';
 
 export class CreateRoomDto {
   @IsNotEmpty()
@@ -23,6 +25,7 @@ export class CreateRoomDto {
   capacity: number;
 
   @IsOptional()
+  @IsArray()
   @IsString({ each: true })
-  equipements?: string[];
+  equipements: EquipementsDto[];
 }

@@ -22,7 +22,7 @@ export class RoomEntity {
   capacity: number;
 
   @Column()
-  equipements: string[];
+  equipements: { name: string }[];
 
   @CreateDateColumn()
   createdAt: Date;
