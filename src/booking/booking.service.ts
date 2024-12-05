@@ -6,13 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookingEntity } from '@booking/booking.entity';
-import {
-  LessThan,
-  LessThanOrEqual,
-  MoreThan,
-  MoreThanOrEqual,
-  Repository,
-} from 'typeorm';
+import { Repository } from 'typeorm';
 import { RoomEntity } from '@app/room/room.entity';
 import { ObjectId } from 'mongodb';
 import { CreateBookingDto } from './dtos/create-booking.dto';
@@ -35,7 +29,6 @@ export class BookingService {
     const objectIdRoom = new ObjectId(roomId);
     console.log('roomId (ObjectId):', objectIdRoom);
     console.log('Vérification des conflits :');
-    console.log('roomId:', objectIdRoom);
     console.log('startTime <= endTime:', endTime);
     console.log('endTime >= startTime:', startTime);
 
@@ -88,8 +81,6 @@ export class BookingService {
     endDate.setDate(endDate.getDate() + 5); // Fixe le jour au vendredi de la même semaine
     endDate.setHours(18, 0, 0, 0); // Définit l'heure de fin à 18:00 (fin de journée)
 
-    //TODO récupération des booking pour le crenaux définit
-
     try {
       // Accès au repository MongoDB via le gestionnaire de transactions pour gérer les opérations Mongo
       const managerBookingRepo = this.bookingRepository.manager;
@@ -107,7 +98,7 @@ export class BookingService {
               $lte: endDate, // `startTime` doit être inférieur ou égal à `endDate` (fin de la semaine)
             },
           },
-          order: { startTime: 1 }, // Trie les résultats par `startTime` croissant (du plus tôt au plus tard)
+          order: { startTime: 1 },
         });
 
       return bookings;

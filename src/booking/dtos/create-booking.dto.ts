@@ -21,10 +21,10 @@ export class CreateBookingDto {
   userEmail: string;
 
   @IsDate()
-  @Transform(({ value }) => new Date(value)) // Transform string to Date
+  @Transform(({ value }) => new Date(value))
   startTime: Date;
 
   @IsDate()
-  @Transform(({ value }) => new Date(value)) // Transform string to Date
+  @Transform(({ value }) => new Date(value))
   endTime: Date;
 }
