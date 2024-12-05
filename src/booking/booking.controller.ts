@@ -1,31 +1,18 @@
 import { Body, Controller, Get, Post, Query, Param } from '@nestjs/common';
 import { BookingService } from '@booking/booking.service';
 import { BookingEntity } from '@booking/booking.entity';
-
+import { CreateBookingDto } from './dtos/create-booking.dto';
 @Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
+  CreateBooking;
   @Post()
   async createBooking(
-    @Body()
-    body: {
-      bookingTitle: string;
-      userEmail: string;
-      roomId: string;
-      startTime: string;
-      endTime: string;
-    },
-  ) {
-    const { bookingTitle, userEmail, roomId, startTime, endTime } = body;
+    @Body() createRoomDto: CreateBookingDto,
+  ): Promise<BookingEntity> {
     try {
-      return await this.bookingService.createBooking(
-        bookingTitle,
-        userEmail,
-        roomId,
-        new Date(startTime),
-        new Date(endTime),
-      );
+      return await this.bookingService.createBooking(createRoomDto);
     } catch (error) {
       console.error('Erreur lors de la création de la réservation :', error);
       throw new Error('Erreur lors de la réservation');
