@@ -43,7 +43,7 @@ export class BookingService {
 
     const existingBooking = await this.bookingRepository.findOne({
       where: {
-        _roomId: new ObjectId(roomId),
+        _roomId: objectIdRoom,
         startTime: startTime,
         endTime: endTime,
       },
@@ -55,7 +55,7 @@ export class BookingService {
     console.log('existingBooking : ', existingBooking);
 
     const booking = this.bookingRepository.create({
-      _roomId: new ObjectId(roomId),
+      _roomId: objectIdRoom,
       bookingTitle,
       userEmail,
       startTime,
@@ -90,7 +90,7 @@ export class BookingService {
         .getMongoRepository(BookingEntity)
         .find({
           where: {
-            roomId: objectIdRoom,
+            _roomId: objectIdRoom,
 
             // Filtrage des réservations avec `startTime` entre `startDate` et `endDate`
             startTime: {
@@ -100,7 +100,7 @@ export class BookingService {
           },
           order: { startTime: 1 },
         });
-
+      console.log('bookings', bookings);
       return bookings;
     } catch (error) {
       console.error('Erreur lors de la récupération des réservations:', error); // Log en cas d'erreur
