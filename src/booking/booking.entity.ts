@@ -1,13 +1,19 @@
 import { ObjectId } from 'mongodb';
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ObjectIdColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('Booking')
 export class BookingEntity {
   @ObjectIdColumn()
-  id: ObjectId;
+  _id: ObjectId;
 
   @Column()
-  roomId: ObjectId;
+  _roomId: ObjectId;
 
   @Column()
   bookingTitle: string;
@@ -21,9 +27,9 @@ export class BookingEntity {
   @Column()
   endTime: Date;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn()
   updatedAt: Date;
 }

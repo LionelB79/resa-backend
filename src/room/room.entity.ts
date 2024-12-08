@@ -10,7 +10,7 @@ import {
 @Entity('Room')
 export class RoomEntity {
   @ObjectIdColumn()
-  id: ObjectId;
+  _id: ObjectId;
 
   @Column()
   name: string;

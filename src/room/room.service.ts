@@ -5,9 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoomEntity } from '@room/room.entity';
-import { ObjectId, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateRoomDto } from '@room/dtos/create-room.dto';
 import { EquipementsService } from '@equipements/equipements.service';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class RoomService {
@@ -60,8 +61,10 @@ export class RoomService {
     return this.roomRepository.find();
   }
   async findById(id: string): Promise<RoomEntity> {
+    const objectId = new ObjectId(id);
+
     const room = await this.roomRepository.findOne({
-      where: { id: new ObjectId(id) },
+      where: { _id: objectId },
     });
 
     if (!room) {
