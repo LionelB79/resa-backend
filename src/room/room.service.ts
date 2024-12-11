@@ -18,8 +18,6 @@ export class RoomService {
     private equipementsService: EquipementsService,
   ) {}
 
-  //TODO creer une table equipement et l'alimenter à la creation d'une salle
-  //TODO la creation de la salle enregistrée en base à unse heure de decalage -> à gérer
   async createRoom(createRoomDto: CreateRoomDto): Promise<RoomEntity> {
     const { name, description, capacity, equipements } = createRoomDto;
 
@@ -36,15 +34,13 @@ export class RoomService {
       });
 
       //Persistance des nouveau equipements
-      await Promise.all(
-        await Promise.all(
-          equipements.map(async (equipement) => {
-            await this.equipementsService.createEquipment(equipement.name);
-          }),
-        ),
-      );
 
-      await this.roomRepository.save(room);
+      await Promise.all(
+        equipements.map(async (equipement) => {
+          await this.equipementsService.createEquipment(equipement.name);
+        }),
+      ),
+        await this.roomRepository.save(room);
       return room;
     } catch (error) {
       throw new BadRequestException(
