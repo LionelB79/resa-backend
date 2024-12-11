@@ -21,7 +21,7 @@ export class EquipementsService {
       return await this.equipementsRepository.save(equipement);
     }
   }
-  async getAllEquipment(): Promise<EquipementsEntity[]> {
+  async findAll(): Promise<EquipementsEntity[]> {
     return this.equipementsRepository.find();
   }
 }

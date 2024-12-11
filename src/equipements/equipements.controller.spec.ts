@@ -18,7 +18,7 @@ describe('EquipementsController', () => {
     ];
 
     fakeEquipementsService = {
-      getAllEquipment: () => {
+      findAll: () => {
         return Promise.resolve(equipements);
       },
     };

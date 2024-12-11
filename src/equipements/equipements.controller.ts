@@ -8,6 +8,6 @@ export class EquipementsController {
 
   @Get()
   async getAllEquipment(): Promise<EquipementsEntity[]> {
-    return this.equipementsService.getAllEquipment();
+    return this.equipementsService.findAll();
   }
 }

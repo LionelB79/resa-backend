@@ -40,7 +40,7 @@ describe('EquipementsService', () => {
   });
 
   it('findAll - OK | should return all equipements', async () => {
-    const equipements = await service.getAllEquipment();
+    const equipements = await service.findAll();
 
     expect(equipements.length).toBe(2);
     expect(equipements[0].name).toBe('Babyfoot');
