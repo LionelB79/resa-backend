@@ -72,15 +72,11 @@ describe('RoomController', () => {
     controller = module.get<RoomController>(RoomController);
   });
 
-  it('should be defined', () => {
+  it('INSTANCE OK | should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-
-  it('should create a new room successfully', async () => {
+  it('createRoom OK | should create a new room successfully', async () => {
     const createRoomDto: CreateRoomDto = {
       name: 'Nouvelle Salle',
       description: 'Une nouvelle salle de réunion',
@@ -97,7 +93,7 @@ describe('RoomController', () => {
     expect(createdRoom._id).toBeDefined();
   });
 
-  it('should return a room when a valid ID is provided', async () => {
+  it('createRoom OK | should return a room when a valid ID is provided', async () => {
     const roomId = '507f1f77bcf86cd799439012';
 
     const room = await controller.getRoomById(roomId);
@@ -107,7 +103,7 @@ describe('RoomController', () => {
     expect(room._id.toString()).toBe(roomId);
   });
 
-  it('should return undefined for a non-existent room ID', async () => {
+  it('createRoom KO | should return undefined for a non-existent room ID', async () => {
     const nonExistentId = '507f1f77bcf86cd799439999';
     const room = await controller.getRoomById(nonExistentId);
     expect(room).toBeUndefined();
