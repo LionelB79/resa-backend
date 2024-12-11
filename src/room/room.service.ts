@@ -4,10 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RoomEntity } from '@room/room.entity';
+import { RoomEntity } from '../room/room.entity';
 import { Repository } from 'typeorm';
 import { CreateRoomDto } from '@room/dtos/create-room.dto';
-import { EquipementsService } from '@equipements/equipements.service';
+import { EquipementsService } from '../equipements/equipements.service';
 import { ObjectId } from 'mongodb';
 
 @Injectable()
