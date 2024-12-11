@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query, Param } from '@nestjs/common';
-import { BookingService } from '@booking/booking.service';
-import { BookingEntity } from '@booking/booking.entity';
+import { BookingService } from '../booking/booking.service';
+import { BookingEntity } from '../booking/booking.entity';
 import { CreateBookingDto } from './dtos/create-booking.dto';
 @Controller('booking')
 export class BookingController {

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BookingEntity } from '@booking/booking.entity';
+import { BookingEntity } from '../booking/booking.entity';
 import {
   Between,
   LessThan,
@@ -14,7 +14,7 @@ import {
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
-import { RoomEntity } from '@app/room/room.entity';
+import { RoomEntity } from '../room/room.entity';
 import { ObjectId } from 'mongodb';
 import { CreateBookingDto } from './dtos/create-booking.dto';
 
