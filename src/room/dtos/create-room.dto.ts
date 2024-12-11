@@ -1,12 +1,10 @@
 import {
   IsArray,
-  IsDate,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
   MaxLength,
-  Min,
   ValidateNested,
 } from 'class-validator';
 import { EquipementsDto } from '@equipements/dtos/equipements.dto';
