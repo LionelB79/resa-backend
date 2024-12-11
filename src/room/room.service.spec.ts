@@ -24,7 +24,30 @@ describe('RoomService', () => {
       updatedAt: new Date(),
     };
 
+    const predefinedRooms: RoomEntity[] = [
+      {
+        _id: new ObjectId('507f1f77bcf86cd799439012'),
+        name: 'Salle de Réunion 1',
+        description: 'Salle de réunion principale',
+        capacity: 10,
+        equipements: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        _id: new ObjectId('507f1f77bcf86cd799439013'),
+        name: 'Salle de Conférence',
+        description: 'Grande salle pour conférences',
+        capacity: 50,
+        equipements: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
     fakeRepository = {
+      find: () => Promise.resolve(predefinedRooms),
+
       findOne: (options) => {
         const id = (options.where as any)._id;
 
@@ -65,6 +88,7 @@ describe('RoomService', () => {
     expect(room).toBeDefined();
     expect(room._id.toString()).toBe(existingId);
     expect(room.name).toBe('Test Room');
+    expect(room.description).toBe('A test room');
   });
 
   it('findById - KO | should return a NotFoundException', async () => {
@@ -76,5 +100,20 @@ describe('RoomService', () => {
     await expect(service.findById(nonExistingId)).rejects.toThrow(
       `Salle avec l'ID ${nonExistingId} non trouvée`,
     );
+  });
+
+  it('findAll - OK | devrait retourner toutes les salles', async () => {
+    const rooms = await service.findAll();
+
+    // Vérification du nombre de salles
+    expect(rooms.length).toBe(2);
+
+    // Vérification des détails de la première salle
+    expect(rooms[0].name).toBe('Salle de Réunion 1');
+    expect(rooms[0].capacity).toBe(10);
+
+    // Vérification des détails de la deuxième salle
+    expect(rooms[1].name).toBe('Salle de Conférence');
+    expect(rooms[1].capacity).toBe(50);
   });
 });
