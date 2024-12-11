@@ -7,7 +7,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { EquipementsDto } from '@equipements/dtos/equipements.dto';
+import { EquipementsDto } from '../../equipements/dtos/equipements.dto';
 import { Type } from 'class-transformer';
 
 export class CreateRoomDto {
