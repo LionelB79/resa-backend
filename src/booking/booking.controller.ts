@@ -6,13 +6,12 @@ import { CreateBookingDto } from './dtos/create-booking.dto';
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
-  CreateBooking;
   @Post()
   async createBooking(
-    @Body() createRoomDto: CreateBookingDto,
+    @Body() createBooking: CreateBookingDto,
   ): Promise<BookingEntity> {
     try {
-      return await this.bookingService.createBooking(createRoomDto);
+      return await this.bookingService.createBooking(createBooking);
     } catch (error) {
       console.error('Erreur lors de la création de la réservation :', error);
       throw new Error('Erreur lors de la réservation');
