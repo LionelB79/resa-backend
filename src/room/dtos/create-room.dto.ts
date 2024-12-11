@@ -7,8 +7,10 @@ import {
   IsString,
   MaxLength,
   Min,
+  ValidateNested,
 } from 'class-validator';
 import { EquipementsDto } from '@equipements/dtos/equipements.dto';
+import { Type } from 'class-transformer';
 
 export class CreateRoomDto {
   @IsNotEmpty()
@@ -24,8 +26,8 @@ export class CreateRoomDto {
   @IsNumber()
   capacity: number;
 
-  @IsOptional()
   @IsArray()
-  @IsString({ each: true })
+  @ValidateNested({ each: true })
+  @Type(() => EquipementsDto)
   equipements: EquipementsDto[];
 }
