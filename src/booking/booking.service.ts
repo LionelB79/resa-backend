@@ -6,14 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookingEntity } from '../booking/booking.entity';
-import {
-  Between,
-  LessThan,
-  LessThanOrEqual,
-  MoreThan,
-  MoreThanOrEqual,
-  Repository,
-} from 'typeorm';
+import { Repository } from 'typeorm';
 import { RoomEntity } from '../room/room.entity';
 import { ObjectId } from 'mongodb';
 import { CreateBookingDto } from './dtos/create-booking.dto';
