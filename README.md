@@ -22,8 +22,8 @@ Assurez-vous que MongoDB est installé et en cours d'exécution localement ou su
   Pour insérer des salles (rooms) :
   npm run insert:rooms
 
-Pour insérer des réservations (bookings) :
-npm run insert:bookings
+  Pour insérer des réservations (bookings) :
+  npm run insert:bookings
 
 - Lancer l'application
   Une fois les données insérées, lancez le serveur backend :
