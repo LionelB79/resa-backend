@@ -31,8 +31,6 @@ export class BookingController {
     @Param('roomId') roomId: string,
     @Query('weekStart') weekStart: string,
   ) {
-    console.log('roomId', roomId);
-    console.log('weekStart', weekStart);
     return await this.bookingService.getRoomBookingsForWeek(
       roomId,
       new Date(weekStart),

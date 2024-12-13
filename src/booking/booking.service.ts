@@ -110,7 +110,6 @@ export class BookingService {
           },
           order: { startTime: 1 },
         });
-      console.log('bookings', bookings);
       return bookings;
     } catch (error) {
       console.error('Erreur lors de la récupération des réservations:', error); // Log en cas d'erreur
