@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { BookingService } from '../booking/booking.service';
 import { BookingEntity } from '../booking/booking.entity';
 import { CreateBookingDto } from './dtos/create-booking.dto';
@@ -29,5 +37,10 @@ export class BookingController {
       roomId,
       new Date(weekStart),
     );
+  }
+
+  @Delete('cancel/:bookingId')
+  async cancelBooking(@Param('bookingId') bookingId: string) {
+    return await this.bookingService.cancelBooking(bookingId);
   }
 }

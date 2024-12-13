@@ -117,4 +117,18 @@ export class BookingService {
       throw new Error('Erreur lors de la récupération des réservations'); // Lève une erreur en cas d'échec
     }
   }
+
+  // Annuler une réservation
+  async cancelBooking(bookingId: string) {
+    const booking = await this.bookingRepository.findOne({
+      where: { _id: new ObjectId(bookingId) },
+    });
+
+    if (!booking) {
+      throw new NotFoundException('Réservation non trouvée');
+    }
+
+    await this.bookingRepository.remove(booking);
+    return { message: 'Réservation annulée avec succès' };
+  }
 }
