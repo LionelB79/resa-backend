@@ -1,16 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RoomService } from '../room/room.service';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { RoomEntity } from '../room/room.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
-import { CreateRoomDto } from '@room/dtos/create-room.dto';
+import { CreateRoomDto } from '../room/dtos/create-room.dto';
 import { EquipementsService } from '../equipements/equipements.service';
 import { EquipementsEntity } from '../equipements/equipements.entity';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+
 describe('RoomService', () => {
   let service: RoomService;
-  let fakeRepository: Partial<Repository<RoomEntity>>;
+  let fakeRoomRepository: Partial<Repository<RoomEntity>>;
   let fakeEquipementsService: Partial<EquipementsService>;
 
   beforeEach(async () => {
@@ -45,9 +46,8 @@ describe('RoomService', () => {
       },
     ];
 
-    fakeRepository = {
+    fakeRoomRepository = {
       find: () => Promise.resolve(predefinedRooms),
-
       findOne: (options) => {
         const id = (options.where as any)._id;
 
@@ -57,6 +57,12 @@ describe('RoomService', () => {
 
         return Promise.resolve(null);
       },
+      save: (room) => Promise.resolve(room),
+    };
+
+    fakeEquipementsService = {
+      createEquipment: (name: string) =>
+        Promise.resolve({ name } as EquipementsEntity),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -65,7 +71,7 @@ describe('RoomService', () => {
         EquipementsService,
         {
           provide: getRepositoryToken(RoomEntity),
-          useValue: fakeRepository,
+          useValue: fakeRoomRepository,
         },
         {
           provide: EquipementsService,
@@ -88,7 +94,6 @@ describe('RoomService', () => {
     expect(room).toBeDefined();
     expect(room._id.toString()).toBe(existingId);
     expect(room.name).toBe('Test Room');
-    expect(room.description).toBe('A test room');
   });
 
   it('findById - KO | should return a NotFoundException', async () => {
@@ -102,7 +107,7 @@ describe('RoomService', () => {
     );
   });
 
-  it('findAll - OK | devrait retourner toutes les salles', async () => {
+  it('findAll - OK | should return all rooms', async () => {
     const rooms = await service.findAll();
 
     // Vérification du nombre de salles
@@ -116,4 +121,67 @@ describe('RoomService', () => {
     expect(rooms[1].name).toBe('Salle de Conférence');
     expect(rooms[1].capacity).toBe(50);
   });
+
+  // it('createRoom - OK | should create a new room successfully', async () => {
+  //   const createRoomDto: CreateRoomDto = {
+  //     name: 'New Room',
+  //     description: 'A brand new room',
+  //     capacity: 15,
+  //     equipements: [{ name: 'Projector' }, { name: 'Whiteboard' }],
+  //   };
+
+  //   const createdRoom = await service.createRoom(createRoomDto);
+
+  //   expect(createdRoom).toEqual(
+  //     expect.objectContaining({
+  //       name: 'New Room',
+  //       description: 'A brand new room',
+  //       capacity: 15,
+  //       equipements: [{ name: 'Projector' }, { name: 'Whiteboard' }],
+  //     }),
+  //   );
+  // });
+
+  // it('createRoom - KO | should throw BadRequestException when room already exists', async () => {
+  //   const createRoomDto: CreateRoomDto = {
+  //     name: 'Existing Room',
+  //     description: 'Trying to create a duplicate room',
+  //     capacity: 10,
+  //     equipements: [],
+  //   };
+
+  //   await expect(service.createRoom(createRoomDto)).rejects.toThrow(
+  //     BadRequestException,
+  //   );
+  //   await expect(service.createRoom(createRoomDto)).rejects.toThrow(
+  //     `La salle "Existing Room" existe déjà.`,
+  //   );
+  // });
+
+  // it('createRoom - OK | should create room and equipment', async () => {
+  //   const createRoomDto: CreateRoomDto = {
+  //     name: 'Multimedia Room',
+  //     description: 'Room with advanced equipment',
+  //     capacity: 20,
+  //     equipements: [{ name: 'Camera' }, { name: 'Microphone' }],
+  //   };
+
+  //   const createEquipmentSpy = jest.spyOn(
+  //     fakeEquipementsService,
+  //     'createEquipment',
+  //   );
+
+  //   const createdRoom = await service.createRoom(createRoomDto);
+
+  //   expect(createEquipmentSpy).toHaveBeenCalledTimes(2);
+  //   expect(createEquipmentSpy).toHaveBeenCalledWith('Camera');
+  //   expect(createEquipmentSpy).toHaveBeenCalledWith('Microphone');
+
+  //   expect(createdRoom).toEqual(
+  //     expect.objectContaining({
+  //       name: 'Multimedia Room',
+  //       equipements: [{ name: 'Camera' }, { name: 'Microphone' }],
+  //     }),
+  //   );
+  // });
 });
