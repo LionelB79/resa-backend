@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateRoomDto } from '@room/dtos/create-room.dto';
+import { CreateRoomDto } from '../room/dtos/create-room.dto';
 import { RoomEntity } from '@room/room.entity';
 import { RoomService } from './room.service';
 

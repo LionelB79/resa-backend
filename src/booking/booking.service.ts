@@ -5,9 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BookingEntity } from '@booking/booking.entity';
+import { BookingEntity } from '../booking/booking.entity';
 import { Repository } from 'typeorm';
-import { RoomEntity } from '@app/room/room.entity';
+import { RoomEntity } from '../room/room.entity';
 import { ObjectId } from 'mongodb';
 import { CreateBookingDto } from './dtos/create-booking.dto';
 
@@ -20,39 +20,49 @@ export class BookingService {
     private roomRepository: Repository<RoomEntity>,
   ) {}
 
+  //On vérifier si le créneau est déjà réservéo u si il chevauche un booking deja existant
   async createBooking(
     @Body() createRoomDto: CreateBookingDto,
   ): Promise<BookingEntity> {
     const { roomId, bookingTitle, userEmail, startTime, endTime } =
       createRoomDto;
-    console.log('roomId', roomId);
     const objectIdRoom = new ObjectId(roomId);
-    console.log('roomId (ObjectId):', objectIdRoom);
-    console.log('Vérification des conflits :');
-    console.log('startTime <= endTime:', endTime);
-    console.log('endTime >= startTime:', startTime);
 
-    //On vérifier si la salle existe
+    // On vérifie si la salle existe
     const room = await this.roomRepository.findOne({
-      where: { _id: new ObjectId(roomId) },
+      where: { _id: objectIdRoom },
     });
     if (!room) throw new NotFoundException('Salle non trouvée');
 
-    //TODO fonctionnel pour des crenaux correspondants mais le chevauchement des crenaux devra être géré
-    //On vérifier si le créneau est déjà réservé
-
-    const existingBooking = await this.bookingRepository.findOne({
+    // On vérifie si il y a des chevauchements
+    const conflictingBookings = await this.bookingRepository.find({
       where: {
         _roomId: objectIdRoom,
-        startTime: startTime,
-        endTime: endTime,
       },
     });
 
-    if (existingBooking) {
-      throw new BadRequestException('Ce créneau est déjà réservé');
+    const hasConflict = conflictingBookings.some(
+      (existingBooking) =>
+        // Le nouveau booking commence pendant un booking existant
+        (startTime > existingBooking.startTime &&
+          startTime < existingBooking.endTime) ||
+        // Le nouveau booking se termine pendant un booking existant
+        (endTime > existingBooking.startTime &&
+          endTime < existingBooking.endTime) ||
+        // Le nouveau booking englobe complètement un booking existant
+        (startTime <= existingBooking.startTime &&
+          endTime >= existingBooking.endTime) ||
+        // Un booking existant englobe complètement le nouveau booking
+        (startTime >= existingBooking.startTime &&
+          endTime <= existingBooking.endTime),
+    );
+
+    // Si des bookings en conflit sont trouvés, on renvoie une erreur
+    if (hasConflict) {
+      throw new BadRequestException(
+        'Ce créneau chevauche des réservations existantes',
+      );
     }
-    console.log('existingBooking : ', existingBooking);
 
     const booking = this.bookingRepository.create({
       _roomId: objectIdRoom,
@@ -106,5 +116,19 @@ export class BookingService {
       console.error('Erreur lors de la récupération des réservations:', error); // Log en cas d'erreur
       throw new Error('Erreur lors de la récupération des réservations'); // Lève une erreur en cas d'échec
     }
+  }
+
+  // Annuler une réservation
+  async cancelBooking(bookingId: string) {
+    const booking = await this.bookingRepository.findOne({
+      where: { _id: new ObjectId(bookingId) },
+    });
+
+    if (!booking) {
+      throw new NotFoundException('Réservation non trouvée');
+    }
+
+    await this.bookingRepository.remove(booking);
+    return { message: 'Réservation annulée avec succès' };
   }
 }

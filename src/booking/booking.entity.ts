@@ -26,7 +26,7 @@ export class BookingEntity {
 
   @Column()
   endTime: Date;
-
+  //TODO a corriger : createdAt et updatedAt décalés d'une heure en bdd
   @CreateDateColumn()
   createdAt: Date;
 

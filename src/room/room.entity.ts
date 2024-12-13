@@ -23,7 +23,7 @@ export class RoomEntity {
 
   @Column()
   equipements: { name: string }[];
-
+  //TODO a corriger : createdAt et updatedAt décalés d'une heure en bdd
   @CreateDateColumn()
   createdAt: Date;
 
