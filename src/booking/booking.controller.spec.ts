@@ -9,6 +9,8 @@ describe('BookingController', () => {
   let controller: BookingController;
   let fakeBookingService: Partial<BookingService>;
 
+  const EXISTING_BOOKING_ID = new ObjectId('65b8f26f1c4f8c3a2e8c1eab');
+  const NON_EXISTING_BOOKING_ID = new ObjectId('65b8f26f1c4f8c3a2e8c1eac');
   beforeEach(async () => {
     const predefinedBookings: BookingEntity[] = [
       {
@@ -53,6 +55,12 @@ describe('BookingController', () => {
             (booking) => booking._roomId.toString() === roomId,
           ),
         );
+      },
+      cancelBooking: async (bookingId: string) => {
+        if (bookingId === EXISTING_BOOKING_ID.toString()) {
+          return { message: 'Réservation annulée avec succès' };
+        }
+        throw new Error('Réservation non trouvée');
       },
     };
 
@@ -135,5 +143,21 @@ describe('BookingController', () => {
 
     expect(bookings).toBeDefined();
     expect(bookings.length).toBe(0);
+  });
+
+  it('cancelBooking OK | should successfully cancel an existing booking', async () => {
+    const result = await controller.cancelBooking(
+      EXISTING_BOOKING_ID.toString(),
+    );
+
+    expect(result).toEqual({
+      message: 'Réservation annulée avec succès',
+    });
+  });
+
+  it('cancelBooking KO | should handle errors when canceling a non-existing booking', async () => {
+    await expect(
+      controller.cancelBooking(NON_EXISTING_BOOKING_ID.toString()),
+    ).rejects.toThrow('Réservation non trouvée');
   });
 });
